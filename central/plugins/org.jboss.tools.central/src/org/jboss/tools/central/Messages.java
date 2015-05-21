@@ -44,6 +44,8 @@ public class Messages extends NLS {
 
 	public static String remainingEarlyAccessConnectors_title;
 	public static String remainingEarlyAccessConnectors_message;
+	
+	public static String noEngineError_message;
 
 	static {
 		// initialize resource bundle

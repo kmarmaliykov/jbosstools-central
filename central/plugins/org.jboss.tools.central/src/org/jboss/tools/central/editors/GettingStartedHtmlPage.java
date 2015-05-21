@@ -57,6 +57,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.jboss.tools.central.JBossCentralActivator;
+import org.jboss.tools.central.editors.browser.CentralBrowserErrorWrapper;
 import org.jboss.tools.central.editors.browser.VersionedBrowser;
 import org.jboss.tools.central.internal.CentralHelper;
 import org.jboss.tools.central.internal.JsonUtil;
@@ -141,6 +142,8 @@ public class GettingStartedHtmlPage extends AbstractJBossCentralPage implements 
 	private RefreshBuzzJobChangeListener buzzlistener;
 	private boolean showOnStartup;
 	
+	CentralBrowserErrorWrapper errorWrapper = new CentralBrowserErrorWrapper();
+	
 	public GettingStartedHtmlPage(FormEditor editor) {
 		super(editor, ID, "Getting Started");
 		ProxyWizardManager.INSTANCE.registerListener(this);
@@ -185,6 +188,7 @@ public class GettingStartedHtmlPage extends AbstractJBossCentralPage implements 
 	}
 
 	private void createBrowserSection(final Composite parent) {
+		try {
 		browser = new VersionedBrowser(parent, SWT.NONE);
 		GridData layoutData = new GridData(GridData.FILL_BOTH);
 		layoutData.horizontalSpan = 1;
@@ -287,6 +291,10 @@ public class GettingStartedHtmlPage extends AbstractJBossCentralPage implements 
 			}
 		};
 		centralJob.schedule();
+		}  catch (Throwable t) {
+			//cannot create browser. show error message then
+			errorWrapper.showError(parent, t);
+		}
 	}
 	
 	protected void openQuickstart(final String quickstartId) {
