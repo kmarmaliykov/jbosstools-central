@@ -48,8 +48,15 @@ public class VersionedBrowser extends Browser {
 				   	"}"+ //$NON-NLS-1$
 				   	"return M[0] + '_' + M[1];" ; //$NON-NLS-1$
 		String result = (String) evaluate(browserScript);
-		name = result.substring(0, result.indexOf("_")); //$NON-NLS-1$
-		version = result.substring(result.indexOf("_") + 1); //$NON-NLS-1$
+		if (result == null) {
+			//workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=465757
+			//this bug should be fixed into 4.5RC1
+			name = "Mozilla"; //$NON-NLS-1$
+			version = "10";//or 24, but 10 also support necessary HTML5 features //$NON-NLS-1$
+		} else {
+			name = result.substring(0, result.indexOf("_")); //$NON-NLS-1$
+			version = result.substring(result.indexOf("_") + 1); //$NON-NLS-1$
+		}
 	}
 
 	public String getBrowserName() {
